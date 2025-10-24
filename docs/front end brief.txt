@@ -1,0 +1,123 @@
+Front-End Brief
+
+Project Overview
+This project delivers a multi-platform front-end system composed of a Web Dashboard (Admin/Manager interface) and a Mobile Application, both integrated with a unified backend API.
+The solution is part of a larger system that manages materials, recipes, products, machines, orders, advertising, and telemetry data for automated chemical machines.
+The goal is to provide a seamless, secure, and responsive interface for both administrative operations (via the dashboard) and user interaction with their assigned machines (via the mobile app).
+Objectives
+-	Provide ABAC (Attribute-Based Access Control) to manage recipes, products, machines, and advertising content.
+-	Maintain real-time visibility into machine states, orders, and executions via dashboards and live updates.
+-	Support efficient CRUD operations for recipes, groups, materials, and related entities with strong data validation and auditability.
+-	Deliver a consistent UX/UI across desktop and mobile with localization (English/Arabic) and accessibility compliance.
+-	Dashboard and Application 
+Key Features
+•	Dashboard
+Module	Description	Key Features
+Authentication	Secure login and ABAC enforcement.	-	login
+-	reset password
+-	token-based sessions
+-	secure token storage
+Access Control	Manage users, their information, roles, and permissions.	-	User management
+-	Roles management
+-	Permissions Management
+Brands Management	Manage brands and brand managers to give him access to control their groups and recipes.	-	Brands
+-	Brand managers
+Base Chemical Management	Manage materials and group them logically.	-	Material management
+-	Groups management
+-	Filtering and Pagination
+Store Management	Manage group and machine orders as well as contacting users and assigning delivery to orders, in addition to managing shipping.	-	Order management
+-	Shipping management
+-	Machine order
+-	Contract management
+Produce Management	Categorize products, recipes with details, and neutralizers search and filters.	-	Categories management
+-	Products management
+-	Recipes management
+-	Neutralizers
+-	Recipe details management
+-	Phases and steps management 
+-	Searching, Filtering & Pagination
+Machines & Telemetry	Manage machine metadata and monitor health.	-	Machines management
+-	Units management
+-	View container levels
+-	Monitor Heartbeats
+Orders & Execution	Visualize product requests, orders, and logs additionally to feedbacks	-	Execution Order
+-	Real-time progress monitoring
+-	Real-time step timeline monitoring
+Advertising Management	Manage offers, promotions, and coupons
+Additionally, manage promotion rules and actions that apply to the cart.	-	Promotion management
+-	Promotion rules and actions management
+-	Coupons management
+
+•	Mobile
+Module	Description	Key Features
+Authentication	Secure User login via email/password.
+Sign up as well as verify the user via email OTP	-	Login
+-	Signup
+-	Verification via OTP
+-	Reset password
+-	Token-based sessions
+-	Secure token storage
+Profile Management	View and edit user details.
+Edit the theme of the application	-	User details management
+-	Theme management
+-	Change language
+Home View	Beautiful screen and showing machine and current process, either making product execution or flushing additionally banners and offers.	-	Home view and simple icons for moving to other flows
+-	Call to action button
+-	View banners and offers
+-	Current execution process
+Machines & Telemetry	Manage machine metadata and monitor health as well as the units and container groups level.	-	Machines management
+-	Permit to use
+-	View container levels
+-	Monitor Heartbeats
+Store Module	Add groups to the cart and request machines or units, as well as apply coupons to the cart, also check out cart
+In addition, track the order and show the order history.	-	Cart management
+-	Order management
+-	Order status update
+-	Shipping management
+-	Machine order
+Product Module	Show products and ability to make the product based on recipe also show estimate time to complete.	-	Category filtration 
+-	Brand filtration
+-	View products
+-	Show recipe estimate time and steps count
+-	Searching, Filtering & Pagination
+Orders & Execution Module	Visualize product requests, orders, and logs.
+After complete produce product, the user should make feedback and rating	-	Execution Order
+-	Real-time progress monitoring
+-	Real-time step timeline monitoring
+-	Feedback
+-	Rating
+Notification Module	Gather and display alerts, updates, and messages in one consolidated place	-	Real-time notification
+-	Show important notification on the mobile notification center
+ 
+Technical Requirement
+•	Dashboard
+-	Role: Admins, Managers, and Operators
+-	Purpose: Manage all operational data (recipes, materials, products, machines, …etc)
+-	Language: Typescript
+-	Security: Token must be in a secure  place + security test must be applied
+-	Technology Target: Responsive SPA (Nextjs App)
+-	UI Components: Shadcn-UI/Chakra-UI
+•	Mobile Application
+-	Role: User
+-	Purpose: Operate machines, request product manufacturing, monitor progress, receive offers, and manage personal accounts
+-	Language: Dart
+-	Technology Target: Flatter Framework
+-	State Management: Cubit/Bloc
+-	Router: AutoRoute/GoRouter …etc
+-	Recommended Package: skeletonizer + Dartz + Dio + Equalizer + rexdart
+Non-Functional Front-End Goals
+Category	Goal
+Performance	First render under 3s on standard broadband; 95% of dashboard list views load under 300ms.
+Scalability	Support thousands of concurrent sessions; client caching to reduce API load.
+Maintainability	Modular UI components, isolated business logic (BLoC/Clean Architecture).
+Extensibility	New modules (e.g., analytics or reporting) can be plugged in easily.
+Security	Strict ABAC, token-based access, client-side encryption for sensitive local storage.
+Monitoring	Integrated logging for client errors and telemetry tracking
+
+Timeline And Deliverables
+ 
+Stakeholders And Roles
+Name	Mohammed Kuthari	Awsan Al-Ward
+Roles	Software Engineer
+Technical Leader 	Scrum Master
+
