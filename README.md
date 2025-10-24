@@ -1,36 +1,169 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chemex Dashboard
+
+Enterprise-grade operations dashboard for the Chemex automated chemical machines platform, built with Next.js 16, TypeScript, and shadcn/ui.
+
+## Overview
+
+The Chemex Dashboard provides secure, role-based operational oversight for administrators and managers, enabling them to manage materials, recipes, products, machines, orders, and advertising content across the Chemex ecosystem.
+
+## Features
+
+- **🔐 OAuth 2.0 + PKCE Authentication**: Secure authorization code flow with refresh token support
+- **🎨 Modern UI**: Built with shadcn/ui components and Tailwind CSS v4
+- **🌓 Dark Mode**: System-aware theme switching with persistent preferences via next-themes
+- **🌍 Internationalization**: Multi-locale support (English/Arabic) with next-intl
+- **📊 State Management**: Redux Toolkit with RTK Query for efficient data fetching
+- **🛡️ Type Safety**: Full TypeScript coverage with strict mode enabled
+- **🚀 Performance**: Server-side rendering, streaming, and optimized builds with Next.js App Router
+
+## Architecture
+
+### Core Technology Stack
+
+- **Framework**: Next.js 16.0 (App Router)
+- **Language**: TypeScript 5
+- **UI Library**: shadcn/ui + Radix UI primitives
+- **Styling**: Tailwind CSS v4
+- **State**: Redux Toolkit + RTK Query
+- **Authentication**: OAuth 2.0 (PKCE flow)
+- **Internationalization**: next-intl
+- **Theme**: next-themes
+
+### Project Structure
+
+```text
+src/
+├── app/                    # Next.js App Router pages
+│   ├── (auth)/            # Authentication routes (sign-in)
+│   ├── api/               # API route handlers (OAuth, settings)
+│   └── dashboard/         # Protected dashboard pages
+├── components/            # React components
+│   ├── layout/           # Shell, sidebar, top bar, theme toggle
+│   └── ui/               # shadcn/ui primitives
+├── config/               # Environment config, routes, API settings
+├── constants/            # Shared constants (cookies, endpoints, roles)
+├── features/             # Feature modules (auth, dashboard)
+├── lib/                  # Utilities (PKCE crypto, HTTP client)
+├── providers/            # Client-side providers (Redux, theme)
+├── server/               # Server-side utilities (session, cookies)
+└── state/                # Redux store and RTK Query setup
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+ and npm
+- Git
+- OAuth 2.0 provider credentials (e.g., Auth0, Keycloak)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone git@github.com:Mohammed-Al-Kuthari/chemex_dashboard.git
+   cd chemex_dashboard
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Configure environment variables:
+
+   ```bash
+   cp .env.local.example .env.local
+   ```
+   
+   Edit `.env.local` with your OAuth credentials:
+
+   ```env
+   NEXT_PUBLIC_AUTH_CLIENT_ID=your-client-id
+   NEXT_PUBLIC_AUTH_REDIRECT_URI=http://localhost:3000/api/auth/callback
+   
+   AUTH_AUTHORIZATION_ENDPOINT=https://your-idp/authorize
+   AUTH_TOKEN_ENDPOINT=https://your-idp/token
+   AUTH_LOGOUT_ENDPOINT=https://your-idp/logout
+   AUTH_USERINFO_ENDPOINT=https://your-idp/userinfo
+   AUTH_CLIENT_SECRET=your-client-secret
+   
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
+   NEXT_PUBLIC_APP_URL=http://localhost:3000
+   ```
+
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build production bundle
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+### Code Quality
+
+- **ESLint**: Configured with `eslint-config-next` for Next.js best practices
+- **TypeScript**: Strict mode enabled with path aliases (`@/*`)
+- **Conventional Commits**: All commits follow the [Conventional Commits](https://www.conventionalcommits.org/) specification
+
+## Authentication Flow
+
+1. User navigates to a protected route (e.g., `/dashboard`)
+2. Middleware checks for session cookie; redirects to `/auth/sign-in` if missing
+3. Sign-in page initiates OAuth flow via `/api/auth/login`
+4. OAuth provider redirects back to `/api/auth/callback` with authorization code
+5. Callback handler exchanges code for tokens using PKCE verifier
+6. Tokens are stored in HTTP-only cookies; user is redirected to dashboard
+7. Middleware allows access; session hydrates Redux store on server-side render
+
+## Deployment
+
+### Environment Variables
+
+Ensure all production environment variables are set:
+
+- OAuth endpoints and credentials
+- API base URL
+- Application URL
+- Secure cookie secrets (auto-generated by Next.js)
+
+### Build & Deploy
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Deploy to Vercel, AWS, or any Node.js hosting platform. Configure environment variables in your deployment platform's dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project follows the [Conventional Commits](https://www.conventionalcommits.org/) specification for commit messages:
 
-## Learn More
+- `feat(scope): description` - New features
+- `fix(scope): description` - Bug fixes
+- `refactor(scope): description` - Code refactoring
+- `chore(scope): description` - Maintenance tasks
+- `docs(scope): description` - Documentation updates
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Proprietary - Chemex Platform
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contact
 
-## Deploy on Vercel
+- **Project Lead**: Mohammed Kuthari
+- **Scrum Master**: Awsan Al-Ward
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For questions or support, refer to the technical documentation in `docs/`.
