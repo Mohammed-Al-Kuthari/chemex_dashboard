@@ -1,8 +1,7 @@
 
 import { ThemeProvider } from "next-themes";
-import { type PropsWithChildren } from "react";
 
-export function AppThemeProvider({ children }: PropsWithChildren) {
+export function AppThemeProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ThemeProvider
       attribute="class"
