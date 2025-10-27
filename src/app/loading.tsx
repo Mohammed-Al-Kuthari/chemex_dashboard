@@ -1,4 +1,7 @@
+import { logger } from "@/core/lib/logging/logger";
+
 export default function Loading() {
+  logger.info("Loading workspace...");
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface">
       <div className="flex flex-col items-center gap-3">

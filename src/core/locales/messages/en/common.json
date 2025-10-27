@@ -1,0 +1,22 @@
+{
+  "app": {
+    "title": "Chemex Dashboard",
+    "description": "Manage recipes, machines, orders, and advertising in one place.",
+    "languageLabel": "Language",
+    "themeLabel": "Theme"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "signOut": "Sign out"
+  },
+  "locale": {
+    "en": "English",
+    "ar": "Arabic"
+  },
+  "theme": {
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  }
+}

@@ -1,0 +1,69 @@
+export const ROLES = {
+  SUPER_ADMIN: "super-admin",
+  ADMIN: "admin",
+  MANAGER: "manager",
+  OPERATOR: "operator",
+  VIEWER: "viewer",
+} as const;
+
+export type Role = (typeof ROLES)[keyof typeof ROLES];
+
+export const RESOURCE_TYPES = {
+  ROUTE: "route",
+  FEATURE: "feature",
+  API: "api",
+} as const;
+
+export type ResourceType = (typeof RESOURCE_TYPES)[keyof typeof RESOURCE_TYPES];
+
+export const PERMISSIONS = {
+  MANAGE_USERS: "manage.users",
+  MANAGE_ROLES: "manage.roles",
+  MANAGE_BRANDS: "manage.brands",
+  MANAGE_BASE_CHEMICALS: "manage.base-chemicals",
+  MANAGE_STORE: "manage.store",
+  MANAGE_PRODUCE: "manage.produce",
+  MANAGE_MACHINES: "manage.machines",
+  MANAGE_ORDERS: "manage.orders",
+  MANAGE_ADVERTISING: "manage.advertising",
+  VIEW_TELEMETRY: "view.telemetry",
+  VIEW_REPORTING: "view.reporting",
+} as const;
+
+export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
+
+export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
+  [ROLES.SUPER_ADMIN]: Object.values(PERMISSIONS),
+  [ROLES.ADMIN]: [
+    PERMISSIONS.MANAGE_USERS,
+    PERMISSIONS.MANAGE_ROLES,
+    PERMISSIONS.MANAGE_BRANDS,
+    PERMISSIONS.MANAGE_BASE_CHEMICALS,
+    PERMISSIONS.MANAGE_STORE,
+    PERMISSIONS.MANAGE_PRODUCE,
+    PERMISSIONS.MANAGE_MACHINES,
+    PERMISSIONS.MANAGE_ORDERS,
+    PERMISSIONS.MANAGE_ADVERTISING,
+    PERMISSIONS.VIEW_TELEMETRY,
+    PERMISSIONS.VIEW_REPORTING,
+  ],
+  [ROLES.MANAGER]: [
+    PERMISSIONS.MANAGE_BRANDS,
+    PERMISSIONS.MANAGE_BASE_CHEMICALS,
+    PERMISSIONS.MANAGE_STORE,
+    PERMISSIONS.MANAGE_PRODUCE,
+    PERMISSIONS.MANAGE_MACHINES,
+    PERMISSIONS.MANAGE_ORDERS,
+    PERMISSIONS.MANAGE_ADVERTISING,
+    PERMISSIONS.VIEW_TELEMETRY,
+    PERMISSIONS.VIEW_REPORTING,
+  ],
+  [ROLES.OPERATOR]: [
+    PERMISSIONS.MANAGE_MACHINES,
+    PERMISSIONS.MANAGE_ORDERS,
+    PERMISSIONS.VIEW_TELEMETRY,
+  ],
+  [ROLES.VIEWER]: [PERMISSIONS.VIEW_TELEMETRY, PERMISSIONS.VIEW_REPORTING],
+};
+
+export const DEFAULT_ROLE = ROLES.VIEWER;
