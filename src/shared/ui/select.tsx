@@ -6,14 +6,10 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { ClientRenderGate } from "../components/layout/ClientRenderGate";
-// import { Typography } from "../components"
 
-function SelectSkelton() {
+function SelectSkeleton() {
   return (
     <div className="flex items-center gap-3">
-      {/* <Typography variant="small" weight="medium">
-        {t("app.themeLabel")}
-      </Typography> */}
       <div className="h-9 w-40 animate-pulse rounded-md bg-muted" />
     </div>
   );
@@ -23,7 +19,7 @@ function Select({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return (
-    <ClientRenderGate fallback={<SelectSkelton />}>
+    <ClientRenderGate fallback={<SelectSkeleton />}>
       <SelectPrimitive.Root data-slot="select" {...props} />
     </ClientRenderGate>
   );

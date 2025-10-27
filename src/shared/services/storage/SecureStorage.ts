@@ -1,4 +1,10 @@
-type Serializable = Record<string, unknown> | Array<unknown> | string | number | boolean | null;
+type Serializable =
+  | Record<string, unknown>
+  | Array<unknown>
+  | string
+  | number
+  | boolean
+  | null;
 
 type StorageKind = "local" | "session";
 
@@ -23,15 +29,14 @@ const importKey = async (secret: string) => {
   const secretBuffer = textEncoder.encode(secret);
   const keyBuffer = await crypto.subtle.digest("SHA-256", secretBuffer);
 
-  return crypto.subtle.importKey(
-    "raw",
-    keyBuffer,
-    { name: "AES-GCM" },
-    false,
-    ["encrypt", "decrypt"],
-  );
+  return crypto.subtle.importKey("raw", keyBuffer, { name: "AES-GCM" }, false, [
+    "encrypt",
+    "decrypt",
+  ]);
 };
 
+// AES-GCM recommends a 12-byte (96-bit) IV for optimal security and performance.
+// See: https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt#parameters
 const generateIv = () => {
   const iv = crypto.getRandomValues(new Uint8Array(12));
   return iv;
@@ -61,7 +66,7 @@ const encrypt = async (payload: string, secret: string) => {
   const encryptedBuffer = await crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     key,
-    encodedPayload,
+    encodedPayload
   );
 
   return `${encode(iv)}.${encode(encryptedBuffer)}`;
@@ -81,13 +86,16 @@ const decrypt = async (payload: string, secret: string) => {
   const decrypted = await crypto.subtle.decrypt(
     { name: "AES-GCM", iv },
     key,
-    data,
+    data
   );
 
   return textDecoder.decode(decrypted);
 };
 
-export const createSecureStorage = (secret: string, options: SecureStorageOptions = {}) => {
+export const createSecureStorage = (
+  secret: string,
+  options: SecureStorageOptions = {}
+) => {
   const storage = getStorage(options.storage);
 
   const ensureStorage = () => {

@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useMemo, useEffect, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useEffect,
+  type ReactNode,
+} from "react";
 
 import {
   createTelemetryClient,
@@ -14,7 +20,9 @@ export const useTelemetryClient = () => {
   const context = useContext(TelemetryContext);
 
   if (!context) {
-    throw new Error("useTelemetryClient must be used within an AppTelemetryProvider");
+    throw new Error(
+      "useTelemetryClient must be used within an AppTelemetryProvider"
+    );
   }
 
   return context;
@@ -25,24 +33,33 @@ type AppTelemetryProviderProps = {
   options?: TelemetryOptions;
 };
 
-export function AppTelemetryProvider({ children, options }: AppTelemetryProviderProps) {
+export function AppTelemetryProvider({
+  children,
+  options,
+}: AppTelemetryProviderProps) {
   const client = useMemo(
     () =>
       createTelemetryClient({
         endpoint: options?.endpoint,
         disabled: options?.disabled,
       }),
-    [options?.endpoint, options?.disabled],
+    [options?.endpoint, options?.disabled]
   );
-  const serializedContext = options?.defaultContext
-    ? JSON.stringify(options.defaultContext)
-    : null;
+  const serializedContext = useMemo(
+    () =>
+      options?.defaultContext ? JSON.stringify(options.defaultContext) : null,
+    [options]
+  );
 
   useEffect(() => {
     if (options?.defaultContext) {
       client.setContext(options.defaultContext);
     }
-  }, [client, options?.defaultContext, serializedContext]);
+  }, [client, serializedContext, options?.defaultContext]);
 
-  return <TelemetryContext.Provider value={client}>{children}</TelemetryContext.Provider>;
+  return (
+    <TelemetryContext.Provider value={client}>
+      {children}
+    </TelemetryContext.Provider>
+  );
 }

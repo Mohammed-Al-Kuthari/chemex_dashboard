@@ -38,13 +38,12 @@ export const useLocaleSwitcher = () => {
         document.cookie = buildCookie(nextLocale);
       }
 
-      const url = new URL(window.location.href);
-      url.pathname = pathname;
+      const url = new URL(pathname, window.location.origin);
       url.searchParams.set("lang", nextLocale);
       router.replace(`${url.pathname}${url.search}`);
       router.refresh();
     },
-    [pathname, router],
+    [pathname, router]
   );
 
   return { locale, switchLocale };

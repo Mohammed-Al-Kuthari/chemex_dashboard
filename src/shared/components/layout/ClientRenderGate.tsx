@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import { useHydrated } from "@/shared/hooks";
 import { type ReactNode } from "react";

@@ -7,6 +7,15 @@ import {
 } from "@/core/constants/access-control";
 import { authCookieConfig } from "@/core/configs/app-config";
 
+type GlobalBufferType = {
+  Buffer?: {
+    from: (
+      input: string,
+      encoding: string
+    ) => { toString: (encoding: string) => string };
+  };
+};
+
 export type SessionTokenPayload = {
   sub: string;
   roles?: Role[];
@@ -32,13 +41,16 @@ export type Session = {
 
 const ROLE_VALUES = new Set<Role>(Object.values(ROLES) as Role[]);
 
-const PERMISSION_VALUES = new Set<Permission>(Object.values(PERMISSIONS) as Permission[]);
+const PERMISSION_VALUES = new Set<Permission>(
+  Object.values(PERMISSIONS) as Permission[]
+);
 
 const isRole = (candidate: unknown): candidate is Role =>
   typeof candidate === "string" && ROLE_VALUES.has(candidate as Role);
 
 const isPermission = (candidate: unknown): candidate is Permission =>
-  typeof candidate === "string" && PERMISSION_VALUES.has(candidate as Permission);
+  typeof candidate === "string" &&
+  PERMISSION_VALUES.has(candidate as Permission);
 
 const decodeBase64 = (value: string) => {
   const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
@@ -46,7 +58,7 @@ const decodeBase64 = (value: string) => {
     return globalThis.atob(normalized);
   }
 
-  const globalBuffer = (globalThis as { Buffer?: { from: (input: string, encoding: string) => { toString: (encoding: string) => string } } }).Buffer;
+  const globalBuffer = (globalThis as GlobalBufferType).Buffer;
 
   if (globalBuffer) {
     return globalBuffer.from(normalized, "base64").toString("utf-8");
@@ -103,7 +115,8 @@ export const createSessionFromToken = (token: string): Session | null => {
     userId: payload.sub,
     roles,
     permissions,
-    tenantId: typeof payload.tenantId === "string" ? payload.tenantId : undefined,
+    tenantId:
+      typeof payload.tenantId === "string" ? payload.tenantId : undefined,
     locale: typeof payload.locale === "string" ? payload.locale : undefined,
     expiresAt: typeof payload.exp === "number" ? payload.exp : null,
     issuedAt: typeof payload.iat === "number" ? payload.iat : null,
@@ -121,7 +134,9 @@ export const hasSessionExpired = (session: Session) => {
   return Date.now() >= expiresAtMs;
 };
 
-export const getEffectivePermissions = (session: Session | null): Set<Permission> => {
+export const getEffectivePermissions = (
+  session: Session | null
+): Set<Permission> => {
   if (!session) {
     return new Set();
   }
@@ -131,7 +146,10 @@ export const getEffectivePermissions = (session: Session | null): Set<Permission
   return new Set(merged);
 };
 
-export const hasRequiredPermissions = (session: Session | null, permissions: Permission[]) => {
+export const hasRequiredPermissions = (
+  session: Session | null,
+  permissions: Permission[]
+) => {
   if (!permissions.length) {
     return true;
   }

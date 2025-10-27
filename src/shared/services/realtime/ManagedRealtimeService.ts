@@ -1,4 +1,9 @@
-import { RealtimeService, type RealtimeAdapter, type RealtimeChannelOptions, type RealtimePayload } from "./RealtimeService";
+import {
+  RealtimeService,
+  type RealtimeAdapter,
+  type RealtimeChannelOptions,
+  type RealtimePayload,
+} from "./RealtimeService";
 import { logger } from "@/core/lib/logging/logger";
 
 export type RealtimeConnectionState =
@@ -8,7 +13,10 @@ export type RealtimeConnectionState =
   | "reconnecting"
   | "error";
 
-export type RealtimeStateListener = (state: RealtimeConnectionState, error?: unknown) => void;
+export type RealtimeStateListener = (
+  state: RealtimeConnectionState,
+  error?: unknown
+) => void;
 
 export type ManagedRealtimeOptions = {
   autoReconnect?: boolean;
@@ -64,10 +72,15 @@ export class ManagedRealtimeService extends RealtimeService {
 
   override subscribe<TPayload = RealtimePayload>(
     channel: RealtimeChannelOptions,
-    handler: (payload: TPayload) => void | Promise<void>,
+    handler: (payload: TPayload) => void | Promise<void>
   ) {
     if (this.state === "disconnected") {
-      void this.connect().catch(() => undefined);
+      void this.connect().catch((error) => {
+        logger.error("Failed to reconnect in ManagedRealtimeService", {
+          error,
+          attempt: this.reconnectAttempts,
+        });
+      });
     }
 
     return super.subscribe(channel, handler);
@@ -91,11 +104,17 @@ export class ManagedRealtimeService extends RealtimeService {
       return;
     }
 
-    if (this.maxRetries !== undefined && this.reconnectAttempts >= this.maxRetries) {
+    if (
+      this.maxRetries !== undefined &&
+      this.reconnectAttempts >= this.maxRetries
+    ) {
       return;
     }
 
-    const delay = this.retryDelays[Math.min(this.reconnectAttempts, this.retryDelays.length - 1)];
+    const delay =
+      this.retryDelays[
+        Math.min(this.reconnectAttempts, this.retryDelays.length - 1)
+      ];
     this.clearTimer();
     this.reconnectAttempts += 1;
     this.reconnectTimer = setTimeout(() => {
@@ -142,5 +161,5 @@ export class ManagedRealtimeService extends RealtimeService {
 
 export const createManagedRealtimeService = (
   adapter: RealtimeAdapter,
-  options?: ManagedRealtimeOptions,
+  options?: ManagedRealtimeOptions
 ) => new ManagedRealtimeService(adapter, options);
